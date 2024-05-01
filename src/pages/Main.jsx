@@ -34,14 +34,14 @@ export const Main = ()=>{
         return () => clearInterval(interval);
       }, []);
 
-    const playSound = () => {
-        const audio = new Audio('./notification.mp3');
-        audio.play();
-      };
+    // const playSound = () => {
+    //     const audio = new Audio('./notification.mp3');
+    //     audio.play();
+    //   };
     
-      useEffect(() => {
-        playSound();
-      }, [counter]);
+    //   useEffect(() => {
+    //     playSound();
+    //   }, [counter]);
     
     function sortByField(arr) {
         return arr

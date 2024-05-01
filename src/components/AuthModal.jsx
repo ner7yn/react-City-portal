@@ -1,15 +1,16 @@
-/**
- * Функция AuthModal в JavaScript React создает диалоговое окно для аутентификации пользователя с
- * полями формы для входа в систему, электронной почты, пароля и флажка соглашения, включая проверку
- * полей ввода.
- */
+
 import {Dialog,DialogTitle,DialogContent,DialogActions,Button,TextField,IconButton,Checkbox,FormControlLabel,} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
+import {AuthContext} from "../context/AuthProvider";
+import { registration, login} from "../services/http.service";
+import Toast from "./Toast";
 
 export function AuthModal({type, open, onClose }) {
+  const {setAuth} = useContext(AuthContext)
     const [repeatPassword, setRepeatPassword] = useState("");
     const [form, setForm] = useState({ FIO: "",login:"", email: "",password: "" });
+    const [snackbar, setSnackbar] = useState({ open: false, message: null });
     const [loading, setLoading] = useState(false);
     const [agree, setAgree] = useState(true);
     const [FIOError, setFIOError] = useState(false);
@@ -18,13 +19,73 @@ export function AuthModal({type, open, onClose }) {
     const[passwordError,setPasswordError] = useState(false);
     const [hasErrors, setHasErrors] = useState(false);
 
+
+
+    function close() {
+      onClose();
+      setForm({ FIO: "",login:"", email: "",password: "" });
+      setLoading(false);
+    }
+
+    const handleChange = (e) => {
+      setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+  
+    const handleAgreeChange = (event) => {
+      setAgree(event.target.checked);
+    };
+
+    function openSnackbar(message) {
+      setSnackbar({ message: message, open: true });
+    }
+
+
+    async function submit(event) {
+      event.preventDefault();
+      if (type === "Вход"){
+        setLoading(true)
+        loginInAccount();
+      }else{
+        setLoading(true);
+      const res = await registration(form);
+      if (res.message === "Пользователь c таким логином уже существует") {
+        openSnackbar("Пользователь с таким ником уже существует");
+        setLoading(false);
+      } else if (res._id) {
+        loginInAccount();
+      }
+      }
+      setHasErrors(false);
+    }
+
+    async function loginInAccount() {
+      try {
+        const res = await login({ login: form.login, password: form.password });
+        const token = res.token;
+        const user_id = res._id;
+        setLoading(false);
+        if (!token?.length || !user_id) {
+          openSnackbar("Что-то пошло не так...");
+        } else {
+          close();
+          localStorage.setItem("token", token);
+          localStorage.setItem("user_id", user_id);
+          setAuth(true);
+          openSnackbar("Вы успешно авторизовались");
+          setHasErrors(false);
+        }
+      } catch (error) {
+        setLoading(false);
+        openSnackbar("Ошибка при входе в систему");
+      }
+    }
+
+
+
     useEffect(() => {
-        if(repeatPassword === ""){
-            setHasErrors(true)
-        }else{
             const hasEmptyFields = Object.values(form).some(value => value === "");
             setHasErrors(hasEmptyFields || FIOError || MailError || loginError || passwordError);
-        }}, [form, FIOError, MailError, loginError, passwordError]);
+        }, [form, FIOError, MailError, loginError, passwordError]);
 
     useEffect(() => {
         if (form.FIO.length > 0) {
@@ -62,21 +123,11 @@ export function AuthModal({type, open, onClose }) {
           }
       }, [form.login]);
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleAgreeChange = (event) => {
-    setAgree(event.target.checked);
-  };
-    function close() {
-        onClose();
-        setForm({ FIO: "",login:"", email: "",password: "" });
-        setLoading(false);
-      }
-
     return (
+      <>
+      <Toast open={snackbar.open} onClose={() => setSnackbar({ ...snackbar, open: false })} message={snackbar.message} />
         <Dialog open={open} onClose={onClose}>
+          <form onSubmit={submit}>
         <DialogTitle>
           {type}
           <IconButton
@@ -178,12 +229,13 @@ export function AuthModal({type, open, onClose }) {
         <DialogActions sx={{ justifyContent: 'center'}}>
         <Button
         type="submit"
-        disabled={loading || !agree || hasErrors}
+        disabled={loading || !agree}
         variant="contained"
       >
         Отправить
       </Button>
         </DialogActions>
+        </form>
       </Dialog>
-    );
+    </>);
   }
