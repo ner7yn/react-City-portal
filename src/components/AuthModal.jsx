@@ -55,7 +55,6 @@ export function AuthModal({type, open, onClose }) {
         loginInAccount();
       }
       }
-      setHasErrors(false);
     }
 
     async function loginInAccount() {
@@ -72,7 +71,6 @@ export function AuthModal({type, open, onClose }) {
           localStorage.setItem("user_id", user_id);
           setAuth(true);
           openSnackbar("Вы успешно авторизовались");
-          setHasErrors(false);
         }
       } catch (error) {
         setLoading(false);
@@ -81,12 +79,18 @@ export function AuthModal({type, open, onClose }) {
     }
 
 
-
     useEffect(() => {
-            const hasEmptyFields = Object.values(form).some(value => value === "");
-            setHasErrors(hasEmptyFields || FIOError || MailError || loginError || passwordError);
-        }, [form, FIOError, MailError, loginError, passwordError]);
-
+      if (type === "Вход") {
+        const loginError = form.login?false : true;
+        const passwordError= form.password?false : true;
+        setHasErrors(loginError || passwordError);
+      } else {
+        const hasEmptyFields = Object.values(form).some(value => value === "");
+        const repeatPasswordError = repeatPassword?false : true; 
+        setHasErrors(hasEmptyFields || FIOError || MailError || loginError || passwordError || repeatPasswordError);
+      }
+  
+    }, [type, form, FIOError, MailError, loginError, passwordError]);
     useEffect(() => {
         if (form.FIO.length > 0) {
             const isCyrillic = /^[А-Яа-я\s-]*$/.test(form.FIO);
@@ -229,7 +233,7 @@ export function AuthModal({type, open, onClose }) {
         <DialogActions sx={{ justifyContent: 'center'}}>
         <Button
         type="submit"
-        disabled={loading || !agree}
+        disabled={loading || !agree || hasErrors}
         variant="contained"
       >
         Отправить

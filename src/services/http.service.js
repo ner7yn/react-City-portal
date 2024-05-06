@@ -3,6 +3,13 @@ export function getAllApplications(){
     return _request(`applications`,'GET');
 }
 
+export function getMeAllApplications(token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`MyApplications`,'GET',null,headers);
+}
+
 
 export function registration(data){
   return _request(`auth/register`,'POST',data)

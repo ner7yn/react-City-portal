@@ -34,7 +34,7 @@ export default function Header() {
 
     return (
         <>
-        <header className="flex items-center justify-between px-12 py-8">
+        <header className="flex items-center justify-between px-12 pt-8">
             <div className="flex">
                 <img src="../logo.png" alt="" className="cursor-pointer" onClick={() => routeTo("",)}></img>
             </div>

@@ -7,14 +7,14 @@
  * решенных приложений. Он также отображает до четырех разрешенных приложений подряд с помощью
  * компонента MainCard.
  */
-import { useState,useEffect,useRef } from "react";
+import { useState,useEffect} from "react";
 import { MainCard } from "../components/MainCard";
 import { getAllApplications } from "../services/http.service";
 
 export const Main = ()=>{
     const [counter,setCounter] = useState(0);
     const [applications, setApplications] = useState({ default: [], four: [] });
-    const [loading, setLoading] = useState(true); 
+    // const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const init = async () => {
@@ -51,14 +51,14 @@ export const Main = ()=>{
       }
       
         return(
-            <div className="flex flex-col items-center justify-center pt-6">
+            <div className="flex flex-col items-center justify-center">
                 <div className="flex gap-x-2">
                         <h2>Решённые проблемы</h2>
                         <div className="bg-red-400 rounded-full py-0 px-4 flex items-center text-white text-lg">
                             <p>{counter}</p>
                         </div>
                 </div>
-                <div className="flex flex-row gap-5 mt-14">
+                <div className="flex flex-row gap-5 mt-16">
                     {applications.four}
                 </div>
             </div>
