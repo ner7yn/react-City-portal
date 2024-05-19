@@ -71,6 +71,7 @@ export function AuthModal({type, open, onClose }) {
           localStorage.setItem("user_id", user_id);
           setAuth(true);
           openSnackbar("Вы успешно авторизовались");
+          window.location.reload();
         }
       } catch (error) {
         setLoading(false);

@@ -10,6 +10,30 @@ export function getMeAllApplications(token){
   return _request(`MyApplications`,'GET',null,headers);
 }
 
+export function ApplicationDelete(application_id,token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`applications/${application_id}`, 'DELETE', null, headers);
+}
+
+export function uploadImage(file, token) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+
+  return _request('upload', 'POST', formData, headers);
+}
+
+export function ApplicationCreate(data,token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`applications`, 'POST', data, headers);
+}
 
 export function registration(data){
   return _request(`auth/register`,'POST',data)
@@ -32,13 +56,16 @@ async function _request(path, method, body = null, headers = {}) {
     method: method,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
       ...headers
     },
   };
 
-
-  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+  if (body && body instanceof FormData) {
+    // Если тело запроса является FormData, не добавляем Content-Type и не сериализуем тело
+    options.body = body;
+  } else if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+    // В противном случае, если тело запроса не является FormData, сериализуем его в JSON
+    options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(body);
   }
 
@@ -49,7 +76,8 @@ async function _request(path, method, body = null, headers = {}) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response.json();
+    // Если ответ содержит JSON, парсим его, иначе возвращаем сам ответ
+    return response.json().catch(() => response);
   } catch (error) {
     console.error(error);
     if (url.includes('token')) {

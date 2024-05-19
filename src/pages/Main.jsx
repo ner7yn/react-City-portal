@@ -14,6 +14,7 @@ import { getAllApplications } from "../services/http.service";
 export const Main = ()=>{
     const [counter,setCounter] = useState(0);
     const [applications, setApplications] = useState({ default: [], four: [] });
+    console.log(applications)
     // const [loading, setLoading] = useState(true); 
 
     useEffect(() => {

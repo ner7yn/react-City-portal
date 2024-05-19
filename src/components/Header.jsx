@@ -4,6 +4,7 @@ import { AuthModal } from "./AuthModal";
 import { AuthContext } from "../context/AuthProvider";
 import { UserContext } from "../context/UserProvider";
 import { Link, useNavigate } from "react-router-dom";
+import SecurityIcon from '@mui/icons-material/Security';
 
 
 export default function Header() {
@@ -39,9 +40,10 @@ export default function Header() {
                 <img src="../logo.png" alt="" className="cursor-pointer" onClick={() => routeTo("",)}></img>
             </div>
             {isAuth ? (
-                <div className="flex gap-x-4">
+                <div className="flex gap-x-4 items-center">
+                    {/* <SecurityIcon/> */}
                     <BaseButton text="Профиль" onClick={() => routeTo("me")} />
-                    <BaseButton text="Выход" btnStyle="bg-black"onClick={logout}/>
+                    <BaseButton text="Выход" btnStyle="bg-black" onClick={logout}/>
                 </div>
             ) : (
                 <div className="flex gap-x-4">
