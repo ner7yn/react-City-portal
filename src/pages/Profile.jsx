@@ -84,7 +84,6 @@ export const Profile = ()=>{
       setMyApplications(sortedApplications);
         } else if (user) {
           const res = await getMeAllApplications(token);
-          console.log(res)
           if (!res) return;
           const sortedApplications = res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           setMyApplications(sortedApplications);

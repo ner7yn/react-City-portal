@@ -19,7 +19,6 @@ export function UpdateModal({onClose,open,name,application}){
         } else {
           setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         }
-        console.log(form);
       };
 
     async function submit(event){
@@ -27,7 +26,6 @@ export function UpdateModal({onClose,open,name,application}){
         try{
             if(form.status === "Решена"){
             const resFile = await uploadImage(form.image,token);
-            console.log(resFile);
             const File = "http://localhost:5000" + resFile.url;
             const res = await ApplicationUpdateStatus(application._id,{title:application.title,text:application.text,teg:application.teg,status:form.status,imageUrlBefore:application.imageUrlBefore,imageUrlAfter:File},token);
             onClose();

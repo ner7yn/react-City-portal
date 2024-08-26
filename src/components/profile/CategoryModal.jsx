@@ -14,7 +14,6 @@ export function CategoryModal({ onClose, Open }) {
     const token = localStorage.getItem('token');
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
 
-    console.log(category);
     useEffect(() => {
         const init = async () => {
             const res = await getAllCategory();

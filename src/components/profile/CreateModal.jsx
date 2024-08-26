@@ -12,7 +12,7 @@ export function CreateModall({ onClose, open }) {
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
 
 
-    console.log(form)
+
     useEffect(() => {
         const init = async () => {
             const res = await getAllCategory();
@@ -31,14 +31,13 @@ export function CreateModall({ onClose, open }) {
         } else {
             setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         }
-        console.log(form);
+
     };
 
     async function submit(event) {
         event.preventDefault();
         try {
             const resFile = await uploadImage(form.image, token);
-            console.log(resFile);
             const File = "http://localhost:5000" + resFile.url;
             const res = await ApplicationCreate({
                 title: form.title,
