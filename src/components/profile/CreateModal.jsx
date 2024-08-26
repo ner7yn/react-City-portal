@@ -1,46 +1,62 @@
-import {Dialog,DialogContent,DialogActions,Button,InputLabel,FormControl,DialogTitle,TextField,IconButton,Checkbox,FormControlLabel,Select,MenuItem, Input} from '@mui/material';
+import { Dialog, DialogContent, DialogActions, Button, InputLabel, FormControl, DialogTitle, TextField, IconButton, Select, MenuItem } from '@mui/material';
 import BaseButton from '../BaseButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { ApplicationCreate, ApplicationDelete, uploadImage } from '../../services/http.service';
-import { useState } from 'react';
+import { ApplicationCreate, getAllCategory, uploadImage } from '../../services/http.service';
+import { useEffect, useState } from 'react';
+import Toast from '../Toast';
 
-export function CreateModall({onClose,open}){
-    const [form,setForm] = useState({title:"",text:"",teg:"",image:""})
+export function CreateModall({ onClose, open }) {
+    const [form, setForm] = useState({ title: "", text: "", teg: "", image: "" });
     const token = localStorage.getItem('token');
-    const [tegs,setTegs] = useState(["площадка","дом","мусор"]);
+    const [tegs, setTegs] = useState([]);
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
 
 
+    console.log(form)
+    useEffect(() => {
+        const init = async () => {
+            const res = await getAllCategory();
+            setTegs(res); // Сохраняем весь объект категории, а не только имена
+        }
+        init();
+    }, []);
+
     function openSnackbar(message) {
         setSnackbar({ message: message, open: true });
-      }
+    }
 
-
-      const handleChange = (e) => {
+    const handleChange = (e) => {
         if (e.target.type === 'file') {
-          setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+            setForm((prev) => ({ ...prev, image: e.target.files[0] }));
         } else {
-          setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+            setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         }
         console.log(form);
-      };
+    };
 
-    async function submit(event){
-        event.preventDefault()
-        try{
-            const resFile = await uploadImage(form.image,token);
+    async function submit(event) {
+        event.preventDefault();
+        try {
+            const resFile = await uploadImage(form.image, token);
             console.log(resFile);
             const File = "http://localhost:5000" + resFile.url;
-            const res = await ApplicationCreate({title:form.title,text:form.text,teg:form.teg,imageUrlBefore:File},token);
+            const res = await ApplicationCreate({
+                title: form.title,
+                text: form.text,
+                tegId: form.teg, // Сохраняем id категории
+                imageUrlBefore: File
+            }, token);
             openSnackbar("Заявка успешна создана");
             onClose();
             window.location.reload();
-        }catch{
+        } catch {
             openSnackbar("Произошла ошибка при создании заявки");
         }
-    } 
-    return(
+    }
+
+    return (
         <>
+            <Toast open={snackbar.open} onClose={() => setSnackbar({ ...snackbar, open: false })} message={snackbar.message} />
             <Dialog open={open} onClose={onClose}>
                 <form onSubmit={submit}>
                     <DialogTitle>
@@ -52,58 +68,58 @@ export function CreateModall({onClose,open}){
                                 position: 'absolute',
                                 right: 8,
                                 top: 8,
-                                color:'black',
+                                color: 'black',
                             }}
                         >
                             <CloseIcon />
                         </IconButton>
                     </DialogTitle>
                     <DialogContent sx={{
-                        display:"flex",
-                        flexDirection:"column",
-                        minWidth:"400px",
-                        maxWidth:"400px",
-                        gap:"1rem",
-                        marginTop:"15px",
+                        display: "flex",
+                        flexDirection: "column",
+                        minWidth: "400px",
+                        maxWidth: "400px",
+                        gap: "1rem",
+                        marginTop: "15px",
                     }}>
-                        <TextField 
-                            label="Название" 
-                            fullWidth 
-                            name="title" 
-                            value={form.title} 
+                        <TextField
+                            label="Название"
+                            fullWidth
+                            name="title"
+                            value={form.title}
                             onChange={handleChange}
                         />
-                        <TextField 
-                            label="Описание" 
-                            fullWidth 
-                            multiline 
-                            rows={5} 
-                            name="text" 
-                            value={form.text} 
+                        <TextField
+                            label="Описание"
+                            fullWidth
+                            multiline
+                            rows={5}
+                            name="text"
+                            value={form.text}
                             onChange={handleChange}
                         />
                         <FormControl fullWidth>
                             <InputLabel>Категория</InputLabel>
-                            <Select 
-                                label="Категория" 
-                                name="teg" 
-                                value={form.teg} 
+                            <Select
+                                label="Категория"
+                                name="teg"
+                                value={form.teg}
                                 onChange={handleChange}
                             >
-                                {tegs.map((teg, index) => (
-                                    <MenuItem key={index} value={teg}>
-                                        {teg}
+                                {tegs.map((teg) => (
+                                    <MenuItem key={teg._id} value={teg._id}>
+                                        {teg.name}
                                     </MenuItem>
                                 ))}
                             </Select>
                             <div className="flex justify-center mt-7">
                                 <label className="cursor-pointer bg-black text-white text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[67%] block">
                                     Загрузить изображение
-                                    <input 
-                                        type="file" 
-                                        accept="image/*" 
-                                        className="hidden" 
-                                        name="image" 
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        name="image"
                                         onChange={handleChange}
                                     />
                                 </label>
@@ -113,10 +129,10 @@ export function CreateModall({onClose,open}){
                     <DialogActions sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        gap:'10px',
-                        marginTop:'-1rem',
+                        gap: '10px',
+                        marginTop: '-1rem',
                     }}>
-                        <BaseButton text='Создать заявку' onClick={submit}/>
+                        <BaseButton text='Создать заявку' onClick={submit} />
                     </DialogActions>
                 </form>
             </Dialog>

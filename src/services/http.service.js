@@ -10,11 +10,36 @@ export function getMeAllApplications(token){
   return _request(`MyApplications`,'GET',null,headers);
 }
 
+export function getAllCategory(){
+  return _request(`category`,`GET`);
+}
+
+export function createCategory(data,token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`category`, 'POST', data, headers);
+}
+
+export function deleteCategory(category_id,token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`category/${category_id}`, 'DELETE', null, headers);
+}
+
 export function ApplicationDelete(application_id,token){
   const headers = {
     'Authorization': `Bearer ${token}`
   };
   return _request(`applications/${application_id}`, 'DELETE', null, headers);
+}
+
+export function ApplicationUpdateStatus(application_id,data,token){
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  return _request(`applications/${application_id}`, 'PATCH', data, headers);
 }
 
 export function uploadImage(file, token) {

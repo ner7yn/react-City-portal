@@ -46,7 +46,7 @@ export function ProfileCard({application,openModal,admin}){
             <div className=" flex w-full justify-between gap-5">
                 <div className="">
                     <h2  className='p-0 m-0'>{application.title}</h2>
-                    <p className='text-gray-500 -mt-2 mb-2'>{application.teg}</p>
+                    <p className='text-gray-500 -mt-2 mb-2'>{application.teg.name}</p>
                     <p className="line-clamp-2 overflow-hidden">{application.text}</p>
                     <p className='text-gray-500 mt-3'>{formatDateTime(application.updatedAt)}</p>
                 </div>
@@ -58,7 +58,7 @@ export function ProfileCard({application,openModal,admin}){
         <>
           <LoopIcon />
           <div className="flex items-end">
-          <BaseButton text="Изменить статус" onClick={() => openModal(application.title)}/>
+          <BaseButton text="Изменить статус" onClick={() => openModal(application.title, application)}/>
         </div>
         </>
       ) : application.status === 'Решена' ? (

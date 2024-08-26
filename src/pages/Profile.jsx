@@ -22,7 +22,7 @@ export const Profile = ()=>{
     const [modalDelete,setModalDelete] = useState({isOpen:false,name:"Вход",id:''})
     const [modalCreate,setModalCreate] = useState({isOpen:false})
     const [modalUpdate,setModalUpdate] = useState({isOpen:false,name:"",application:{}})
-    const [categoryModal,setCategoryModal] =useState({isOpen:false})
+    const [categoryModal,setCategoryModal] =useState({isOpen:false,id:''})
 
     function openModalCreate() {
         setModalCreate({isOpen: true });
@@ -32,12 +32,12 @@ export const Profile = ()=>{
         setModalCreate({isOpen: false });
       }
 
-      function openModalCategory() {
-        setCategoryModal({isOpen: true });
+      function openModalCategory(id) {
+        setCategoryModal({isOpen: true,id:id });
       }
     
       function closeModalCategory() {
-        setCategoryModal({isOpen: false });
+        setCategoryModal({ ...modalDelete,isOpen: false });
       }
 
       function openModalUpdate(name,application) {
@@ -84,6 +84,7 @@ export const Profile = ()=>{
       setMyApplications(sortedApplications);
         } else if (user) {
           const res = await getMeAllApplications(token);
+          console.log(res)
           if (!res) return;
           const sortedApplications = res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           setMyApplications(sortedApplications);
@@ -121,7 +122,7 @@ export const Profile = ()=>{
         <DeleteModal onClose={closeModalDelete} open = {modalDelete.isOpen} name ={modalDelete.name} id={modalDelete.id}/>
         <CreateModall onClose={closeModalCreate} open = {modalCreate.isOpen}/>
         <UpdateModal onClose={closeModalUpdate} open = {modalUpdate.isOpen} name={modalUpdate.name} application={modalUpdate.application}/>
-        <CategoryModal onClose={closeModalCategory} Open = {categoryModal.isOpen}/>
+        <CategoryModal onClose={closeModalCategory} Open = {categoryModal.isOpen} id={modalDelete.id}/>
       </>
     )
 }

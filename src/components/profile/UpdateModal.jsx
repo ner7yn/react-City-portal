@@ -1,33 +1,51 @@
-import {Dialog,DialogContent,DialogActions,Button,InputLabel,FormControl,DialogTitle,TextField,IconButton,Checkbox,FormControlLabel,Select,MenuItem, Input} from '@mui/material';
+import {Dialog,DialogContent,DialogActions,InputLabel,FormControl,Select,MenuItem} from '@mui/material';
 import BaseButton from '../BaseButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { ApplicationCreate, ApplicationDelete, uploadImage } from '../../services/http.service';
+import { ApplicationUpdateStatus, uploadImage } from '../../services/http.service';
 import { useState } from 'react';
+import Toast from '../Toast';
 
 export function UpdateModal({onClose,open,name,application}){
     const token = localStorage.getItem('token');
-    const [status,setStatus] = useState("");
+    const [form,setForm] = useState({status:"",image:""});
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
-
 
     function openSnackbar(message) {
         setSnackbar({ message: message, open: true });
       }
 
-      function handleChange(event) {
-        setStatus(event.target.value);
-    }
+      const handleChange = (e) => {
+        if (e.target.type === 'file') {
+          setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+        } else {
+          setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        }
+        console.log(form);
+      };
 
     async function submit(event){
         event.preventDefault()
         try{
-           
+            if(form.status === "Решена"){
+            const resFile = await uploadImage(form.image,token);
+            console.log(resFile);
+            const File = "http://localhost:5000" + resFile.url;
+            const res = await ApplicationUpdateStatus(application._id,{title:application.title,text:application.text,teg:application.teg,status:form.status,imageUrlBefore:application.imageUrlBefore,imageUrlAfter:File},token);
+            onClose();
+            window.location.reload();
+            openSnackbar("Статус заявки успешно изменён");
+        }else{
+            const res = await ApplicationUpdateStatus(application._id,{title:application.title,text:application.text,teg:application.teg,status:form.status,imageUrlBefore:application.imageUrlBefore,imageUrlAfter:"отклонена"},token);
+            onClose();
+            window.location.reload();
+            openSnackbar("Статус заявки успешно изменён");
+        }
         }catch{
-            openSnackbar("Произошла ошибка при создании заявки");
+            openSnackbar("Произошла ошибка при изменении статуса заявки");
         }
     } 
     return(
         <>
+         <Toast open={snackbar.open} onClose={() => setSnackbar({ ...snackbar, open: false })} message={snackbar.message} />
             <Dialog open={open} onClose={onClose}>
                 <form onSubmit={submit}>
                     <DialogContent sx={{
@@ -49,8 +67,8 @@ export function UpdateModal({onClose,open,name,application}){
                                 marginBottom:"1rem",
                             }}
                                 label="Категория" 
-                                name="teg" 
-                                value={status} 
+                                name="status" 
+                                value={form.status} 
                                 onChange={handleChange}
                             >
                                     <MenuItem value="Отклонена">
@@ -60,7 +78,20 @@ export function UpdateModal({onClose,open,name,application}){
                                     Решена
                                     </MenuItem>
                             </Select>
-
+                            {form.status === "Решена" ?(
+                                <div className="flex justify-center">
+                                <label className="cursor-pointer text-black text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[100%] block">
+                                    Загрузить изображение
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        className="hidden" 
+                                        name="image" 
+                                        onChange={handleChange}
+                                    />
+                                </label>
+                            </div>
+                            ):(null)}
                         </FormControl>
                     </DialogContent>
                     <DialogActions sx={{

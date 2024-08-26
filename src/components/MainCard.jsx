@@ -31,7 +31,7 @@ const handleMouseLeave = () => {
     >
       <div className="w-[100%] h-[25%] bg-gradient-to-t from-[rgba(0,0,0,1)] from-10% via-[rgba(0,0,0,0.6)] via-75% to-[rgba(0,0,0,0)] p-3 relative">
         <h3 className="text-white text-2xl pt-6">{application.title}</h3>
-        <p className="text-gray-500 text-lg">{application.teg}</p>
+        <p className="text-gray-500 text-lg">{application.teg.name}</p>
         <p className="text-gray-500 absolute bottom-3 right-3"> {formatDateTime(application.updatedAt)}</p>
       </div>
     </div>
