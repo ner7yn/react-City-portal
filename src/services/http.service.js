@@ -76,7 +76,7 @@ export function getUserData(token) {
 }
 
 async function _request(path, method, body = null, headers = {}) {
-  const url = 'http://localhost:5000/' + path;
+  const url = 'https://node-city-portal.onrender.com/' + path;
   const options = {
     method: method,
     headers: {
