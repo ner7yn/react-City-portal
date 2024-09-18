@@ -9,8 +9,6 @@ import { CreateModall } from '../components/profile/CreateModal';
 import { UpdateModal } from '../components/profile/UpdateModal';
 import { CategoryModal } from '../components/profile/CategoryModal';
 
-  
-
 export const Profile = ()=>{
     const {user,setUser} = useContext(UserContext);
     const status = ["Новая","Решена","Отклонена","Все"];

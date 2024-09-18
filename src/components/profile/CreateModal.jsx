@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogActions, Button, InputLabel, FormControl, DialogTitle, TextField, IconButton, Select, MenuItem } from '@mui/material';
+import { Dialog, DialogContent, DialogActions, InputLabel, FormControl, DialogTitle, TextField, IconButton, Select, MenuItem } from '@mui/material';
 import BaseButton from '../BaseButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { ApplicationCreate, getAllCategory, uploadImage } from '../../services/http.service';

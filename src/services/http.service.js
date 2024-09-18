@@ -1,3 +1,4 @@
+import { URL_API } from "../consts";
 
 export function getAllApplications(){
     return _request(`applications`,'GET');
@@ -76,7 +77,7 @@ export function getUserData(token) {
 }
 
 async function _request(path, method, body = null, headers = {}) {
-  const url = 'https://node-city-portal.onrender.com/' + path;
+  const url = URL_API + path;
   const options = {
     method: method,
     headers: {

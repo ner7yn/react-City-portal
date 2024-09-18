@@ -2,7 +2,6 @@ import { Dialog, DialogContent, DialogTitle, Select, MenuItem, IconButton, TextF
 import { useEffect, useState } from "react";
 import BaseButton from '../BaseButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Category } from "@mui/icons-material";
 import { createCategory, deleteCategory, getAllCategory } from "../../services/http.service";
 
 
