@@ -31,6 +31,9 @@ export const UserProvider = ({ children }) => {
       } catch (error) {
         if (error.response && error.response.status === 403) {
           setUser(null);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user_id');
+          localStorage.removeItem('is_admin');
           setAuth(false);
         }
         setIsLoading(false);
