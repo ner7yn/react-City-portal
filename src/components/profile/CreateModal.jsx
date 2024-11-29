@@ -71,16 +71,18 @@ export function CreateModall({ onClose, open }) {
                         >
                             <CloseIcon />
                         </IconButton>
-                    </DialogTitle>
+                    </DialogTitle >
                     <DialogContent sx={{
                         display: "flex",
                         flexDirection: "column",
                         minWidth: "400px",
                         maxWidth: "415px",
                         gap: "1rem",
+                        minHeight: "390px",
                         paddingTop: "15px",
                     }}>
                         <TextField
+                            margin="dense"
                             label="Название"
                             fullWidth
                             name="title"
