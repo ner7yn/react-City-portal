@@ -78,7 +78,7 @@ export function CreateModall({ onClose, open }) {
                         minWidth: "400px",
                         maxWidth: "400px",
                         gap: "1rem",
-                        marginTop: "15px",
+                        paddingTop: "15px",
                     }}>
                         <TextField
                             label="Название"
