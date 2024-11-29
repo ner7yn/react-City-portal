@@ -10,8 +10,7 @@ export function CreateModall({ onClose, open }) {
     const token = localStorage.getItem('token');
     const [tegs, setTegs] = useState([]);
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
-
-
+    const [imageUploaded, setImageUploaded] = useState(false); // Добавляем состояние для отслеживания загрузки изображения
 
     useEffect(() => {
         const init = async () => {
@@ -28,10 +27,10 @@ export function CreateModall({ onClose, open }) {
     const handleChange = (e) => {
         if (e.target.type === 'file') {
             setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+            setImageUploaded(true); // Устанавливаем состояние, что изображение было загружено
         } else {
             setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         }
-
     };
 
     async function submit(event) {
@@ -111,7 +110,7 @@ export function CreateModall({ onClose, open }) {
                                     </MenuItem>
                                 ))}
                             </Select>
-                            <div className="flex justify-center mt-7">
+                            <div className="flex justify-center mt-7 gap-2">
                                 <label className="cursor-pointer bg-black text-white text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[67%] block">
                                     Загрузить изображение
                                     <input
@@ -122,6 +121,7 @@ export function CreateModall({ onClose, open }) {
                                         onChange={handleChange}
                                     />
                                 </label>
+                                {imageUploaded && <p className='text-[1.125rem]'>Изображение загружено</p>}
                             </div>
                         </FormControl>
                     </DialogContent>

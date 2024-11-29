@@ -8,6 +8,7 @@ export function UpdateModal({onClose,open,name,application}){
     const token = localStorage.getItem('token');
     const [form,setForm] = useState({status:"",image:""});
     const [snackbar, setSnackbar] = useState({ open: false, message: null });
+    const [imageUploaded, setImageUploaded] = useState(false);
 
     function openSnackbar(message) {
         setSnackbar({ message: message, open: true });
@@ -16,6 +17,7 @@ export function UpdateModal({onClose,open,name,application}){
       const handleChange = (e) => {
         if (e.target.type === 'file') {
           setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+          setImageUploaded(true);
         } else {
           setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         }
@@ -77,7 +79,7 @@ export function UpdateModal({onClose,open,name,application}){
                                     </MenuItem>
                             </Select>
                             {form.status === "Решена" ?(
-                                <div className="flex justify-center">
+                                <div className="flex justify-center gap-2">
                                 <label className="cursor-pointer text-black text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[100%] block">
                                     Загрузить изображение
                                     <input 
@@ -88,6 +90,7 @@ export function UpdateModal({onClose,open,name,application}){
                                         onChange={handleChange}
                                     />
                                 </label>
+                                {imageUploaded && <p className='text-[1.125rem]'>Изображение загружено</p>}
                             </div>
                             ):(null)}
                         </FormControl>
