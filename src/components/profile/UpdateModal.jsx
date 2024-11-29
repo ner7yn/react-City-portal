@@ -26,7 +26,7 @@ export function UpdateModal({onClose,open,name,application}){
         try{
             if(form.status === "Решена"){
             const resFile = await uploadImage(form.image,token);
-            const File = "http://localhost:5000" + resFile.url;
+            const File = "https://node-city-portal.onrender.com" + resFile.url;
             const res = await ApplicationUpdateStatus(application._id,{title:application.title,text:application.text,teg:application.teg,status:form.status,imageUrlBefore:application.imageUrlBefore,imageUrlAfter:File},token);
             onClose();
             window.location.reload();
