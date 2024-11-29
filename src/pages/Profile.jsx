@@ -10,7 +10,7 @@ import { UpdateModal } from '../components/profile/UpdateModal';
 import { CategoryModal } from '../components/profile/CategoryModal';
 
 export const Profile = ()=>{
-    const {user,setUser} = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const status = ["Новая","Решена","Отклонена","Все"];
     const [selectedStatus, setSelectedStatus] = useState('');
     const [count,setCount] = useState(3);

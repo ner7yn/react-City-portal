@@ -1,6 +1,6 @@
 export const PAGE_TITLE_TO_PATH = {
-    '/': 'Главная',
-    '/me': 'Ваш профиль',
+    '/': 'Городской портал - главная',
+    '/me': 'Городской портал - профиль',
   }
 
 export const URL_API ='https://node-city-portal.onrender.com/'

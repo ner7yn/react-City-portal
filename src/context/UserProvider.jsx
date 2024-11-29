@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
     };
 
     init();
-  }, [setAuth]);
+  }, [isAuth]);
 
   if (isLoading) {
     return (
