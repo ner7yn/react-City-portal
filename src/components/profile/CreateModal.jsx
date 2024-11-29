@@ -76,7 +76,7 @@ export function CreateModall({ onClose, open }) {
                         display: "flex",
                         flexDirection: "column",
                         minWidth: "400px",
-                        maxWidth: "400px",
+                        maxWidth: "415px",
                         gap: "1rem",
                         paddingTop: "15px",
                     }}>
