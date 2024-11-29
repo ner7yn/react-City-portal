@@ -16,6 +16,11 @@ export const UserProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       if (!token?.length) {
         setIsLoading(false);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('is_admin');
+        setAuth(false);
         return;
       }
 

@@ -1,4 +1,4 @@
-import { BrowserRouter as Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Main } from "../pages/Main";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
