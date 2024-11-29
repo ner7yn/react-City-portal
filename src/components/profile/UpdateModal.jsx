@@ -79,7 +79,7 @@ export function UpdateModal({onClose,open,name,application}){
                                     </MenuItem>
                             </Select>
                             {form.status === "Решена" ?(
-                                <div className="flex justify-center gap-2">
+                                <div className="flex justify-center flex-col items-center gap-1">
                                 <label className="cursor-pointer text-black text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[100%] block">
                                     Загрузить изображение
                                     <input 
@@ -90,7 +90,7 @@ export function UpdateModal({onClose,open,name,application}){
                                         onChange={handleChange}
                                     />
                                 </label>
-                                {imageUploaded && <p className='text-[1.125rem]'>Изображение загружено</p>}
+                                {imageUploaded && <p className='text-sm'>Изображение загружено</p>}
                             </div>
                             ):(null)}
                         </FormControl>

@@ -110,7 +110,7 @@ export function CreateModall({ onClose, open }) {
                                     </MenuItem>
                                 ))}
                             </Select>
-                            <div className="flex justify-center mt-7 gap-2">
+                            <div className="flex justify-center flex-col items-center mt-7 gap-1">
                                 <label className="cursor-pointer bg-black text-white text-lg shadow-[4px_4px_11px_rgba(0,0,0,0.2)] py-2 px-4 w-[67%] block">
                                     Загрузить изображение
                                     <input
@@ -121,7 +121,7 @@ export function CreateModall({ onClose, open }) {
                                         onChange={handleChange}
                                     />
                                 </label>
-                                {imageUploaded && <p className='text-[1.125rem]'>Изображение загружено</p>}
+                                {imageUploaded && <p className='text-sm'>Изображение загружено</p>}
                             </div>
                         </FormControl>
                     </DialogContent>
