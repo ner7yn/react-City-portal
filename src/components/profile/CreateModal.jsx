@@ -58,7 +58,7 @@ export function CreateModall({ onClose, open }) {
         event.preventDefault();
         try {
             const resFile = await uploadImage(form.image, token);
-            const File = "http://localhost:5000" + resFile.url;
+            const File = "https://node-city-portal.onrender.com" + resFile.url;
             const res = await ApplicationCreate({
                 title: form.title,
                 text: form.text,
